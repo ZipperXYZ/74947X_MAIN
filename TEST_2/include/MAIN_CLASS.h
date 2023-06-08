@@ -1,10 +1,11 @@
-// WRITED BY GABRIEL BOSSÉ 2023-06-06 \\
+// WRITED BY GABRIEL BOSSÉ 2023-06-06 
 
 
 #include "math.h"
 #include "stdio.h"
 #include "time.h"
 #include "vex.h"
+#include "vex_global.h"
 #include "vex_imu.h"
 #include "MiniPID.h"
 #include "vex_task.h"
@@ -26,8 +27,13 @@ struct DRIVE_TRAIN
   void Pid_loop(){
     while (1){
         if (PID_ENABLED == true){
+            if (SWITCH == true){
+              RIGHT_SIDE.setPosition(0,degrees);
+              LEFT_SIDE.setPosition(0,degrees);
+              SWITCH = false;
+            }
             int DRIVE_AVERAGE = (RIGHT_SIDE.position(degrees)+RIGHT_SIDE.position(degrees))/2;
-            int TURN_AVERAGE = (RIGHT_SIDE.position(degrees)-RIGHT_SIDE.position(degrees));
+            int TURN_AVERAGE = Get_angle(); //(RIGHT_SIDE.position(degrees)-RIGHT_SIDE.position(degrees));
             OUTPUT_DRIVE = DRIVE_PID.getOutput(DRIVE_AVERAGE,DESIRED_DRIVE);
             OUTPUT_TURN = TURN_PID.getOutput(TURN_AVERAGE,DESIRED_TURN);
             RIGHT_SIDE.spin(forward,OUTPUT_DRIVE+OUTPUT_TURN,voltageUnits::volt);
@@ -36,12 +42,14 @@ struct DRIVE_TRAIN
     }
   }
 
-  void Drive_for(){
-
+  void Drive_for(double DEGREE){
+    DESIRED_DRIVE = DEGREE;
+    SWITCH = true; // ?
   }
 
-  void Turn_for(){
-    
+  void Turn_for(double ANGLE){
+    DESIRED_TURN = ANGLE; //* 14.65;
+    SWITCH = true; // ?
   }
 
   double Get_angle(){
@@ -57,4 +65,5 @@ struct DRIVE_TRAIN
     double OUTPUT_TURN;
     double DESIRED_DRIVE = 0;
     double DESIRED_TURN = 0;
+    bool SWITCH = false;
 };

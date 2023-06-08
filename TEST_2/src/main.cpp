@@ -18,12 +18,12 @@
 
 using namespace vex;
 
-DRIVE_TRAIN Drive_train;
+//DRIVE_TRAIN Drive_train;
 
-int WHEN_STARTED{
+//int WHEN_STARTED{
 
-    return 0;
-}
+    //#return 0;
+//}
 
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!

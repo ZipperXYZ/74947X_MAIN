@@ -14,11 +14,11 @@ using namespace vex;
 
 struct DRIVE_TRAIN
 {
-  motor MOTOR_FR;
-  motor MOTOR_FL;
-  motor MOTOR_RR;
-  motor MOTOR_RL;
-  inertial INERTIAL;
+  int32_t PORT_FR;
+  int32_t PORT_FL;
+  int32_t PORT_RR;
+  int32_t PORT_RL;
+  int32_t PORT_INERTIAL;
   double P;
   double I;
   double D;
@@ -59,6 +59,11 @@ struct DRIVE_TRAIN
   private:
     MiniPID DRIVE_PID=MiniPID(P,I,D);
     MiniPID TURN_PID=MiniPID(P,I,D);
+    motor MOTOR_FR = motor(PORT_FR, ratio6_1, true);
+    motor MOTOR_FL = motor(PORT_FL, ratio6_1, true);
+    motor MOTOR_RR = motor(PORT_RR, ratio6_1, false);
+    motor MOTOR_RL = motor(PORT_RL, ratio6_1, false);
+    inertial INERTIAL = inertial(PORT_INERTIAL);
     motor_group RIGHT_SIDE = motor_group(MOTOR_RR,MOTOR_FR);
     motor_group LEFT_SIDE = motor_group(MOTOR_RL,MOTOR_FL);
     double OUTPUT_DRIVE;
